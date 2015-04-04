@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Waterfall</title>
+	<style>
+		.clearfix:after{
+			content: "";
+			display: block;
+			height: 0;
+			clear: both;
+			visibility: hidden;
+		}
+		.box{
+			width: 90%;
+			margin: 0 auto;
+		}
+		ul{
+			width: 100%;
+			list-style: none;
+			margin-right: -15px;
+			padding: 0;
+			position: relative;
+		}
+		ul li{
+			float: left;
+			width: 300px;
+			border: 1px solid #eee;
+			border-radius: 5px;
+			box-shadow: 5px 5px 5px #ddd;
+			padding: 10px;
+			margin-right: 15px;
+		}
+		ul li img{
+			width: 100%;
+		}
+	</style>
+	<script>
+		function Waterfall(options){
+			this.options = options || {};
+			this.boxId = this.options.boxId || "waterfall";
+			this.listClassName = this.options.listClassName || "list";
+			this.callback = this.options.callback || undefined;
+			this.init();
+			this.handle();
+		}
+		Waterfall.prototype = {
+			constructor : Waterfall,
+			init : function(){
+				_self = this;
+				var listArray = _self.listObject(),
+					listWidth = listArray[0].offsetWidth + 15,
+					listRow = Math.floor(document.getElementById(_self.boxId).offsetWidth/listWidth);
+				var listHeightArray = new Array();
+				for(var i=0,j=listArray.length; i<j; i++){
+					var listHeight = listArray[i].offsetHeight;
+					if(i<listRow){
+						listHeightArray[i] = listHeight;
+					}else{
+						var minHeight = Math.min.apply(null,listHeightArray);
+						var minHeightIndex = _self.arrayIndex(listHeightArray,minHeight);
+						listArray[i].style.position = "absolute"
+						listArray[i].style.top = minHeight + 10 + "px";
+						listArray[i].style.left = listArray[minHeightIndex].offsetLeft + "px";
+						listHeightArray[minHeightIndex] += listArray[i].offsetHeight + 10;
+					}
+				}
+				function arrayIndex(){
+					for(var i in array){
+						if(array[i] == item){
+							return i;
+						}else{
+							continue;
+						}
+					}
+				}
+			},
+			listObject : function(){
+				_self = this;
+				if(document.getElementsByClassName){
+					return document.getElementsByClassName(_self.listClassName);
+				}else{
+					var listArray = [],
+						obj = document.getElementById(_self.boxId).getElementsByTagName("*"),
+						reg = new RegExp("\b"+ _self.listClassName +"\b","g");
+					for(var i=0, j=obj.length; i<j; i++){
+						if(reg.test(obj[i].className)){
+							listArray.push(obj[i]);
+						}
+					}
+					return listArray;
+				}
+			},
+			arrayIndex : function(array, item){
+				for(var i in array){
+					if(array[i] == item){
+						return i;
+					}else{
+						continue;
+					}
+				}
+			},
+			scrollDown : function(){
+				_self = this;
+				var listArray = _self.listObject(),
+					lastPicH = listArray[listArray.length - 1].offsetTop,
+					scrollTop = document.documentElement.scrollTop || document.body.scrollTop,
+					documentHeight = document.documentElement.clientHeight;
+				return (lastPicH < scrollTop + documentHeight) ? true : false;
+			},
+			handle : function(){
+				_self = this;
+				if(_self.callback !== "undefined" && typeof(_self.callback) === "function"){
+					_self.callback();
+				}
+			}
+		}
+		window.onload = function(){
+			var data = ['001','002','003','004','005','006','007','008'];
+			new Waterfall({
+				callback : function(){
+					if(this.scrollDown()){
+						//TODO:........
+					}
+				}
+			});
+		}
+	</script>
+</head>
+<body>
+	<div class="box">
+		<ul id="waterfall" class="clearfix">
+			<li class="list"><img src="../pic/1.jpg" alt=""></li>
+			<li class="list"><img src="../pic/4.jpg" alt=""></li>
+			<li class="list"><img src="../pic/5.jpg" alt=""></li>
+			<li class="list"><img src="../pic/2.jpg" alt=""></li>
+			<li class="list"><img src="../pic/3.jpg" alt=""></li>
+			<li class="list"><img src="../pic/9.jpg" alt=""></li>
+			<li class="list"><img src="../pic/007.jpg" alt=""></li>
+			<li class="list"><img src="../pic/1.jpg" alt=""></li>
+			<li class="list"><img src="../pic/6.jpg" alt=""></li>
+			<li class="list"><img src="../pic/7.jpg" alt=""></li>
+			<li class="list"><img src="../pic/4.jpg" alt=""></li>
+			<li class="list"><img src="../pic/1.jpg" alt=""></li>
+			<li class="list"><img src="../pic/4.jpg" alt=""></li>
+			<li class="list"><img src="../pic/5.jpg" alt=""></li>
+			<li class="list"><img src="../pic/2.jpg" alt=""></li>
+			<li class="list"><img src="../pic/3.jpg" alt=""></li>
+			<li class="list"><img src="../pic/9.jpg" alt=""></li>
+			<li class="list"><img src="../pic/6.jpg" alt=""></li>
+			<li class="list"><img src="../pic/5.jpg" alt=""></li>
+			<li class="list"><img src="../pic/2.jpg" alt=""></li>
+			<li class="list"><img src="../pic/3.jpg" alt=""></li>
+		</ul>
+	</div>
+</body>
+</html>

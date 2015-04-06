@@ -15,6 +15,9 @@
 			width: 90%;
 			margin: 0 auto;
 		}
+		h3{
+			text-align: center;
+		}
 		ul{
 			width: 100%;
 			list-style: none;
@@ -24,10 +27,10 @@
 		}
 		ul li{
 			float: left;
-			width: 300px;
-			border: 1px solid #eee;
+			width: 280px;
+			border: 1px solid #ccc;
 			border-radius: 5px;
-			box-shadow: 5px 5px 5px #ddd;
+			box-shadow: 5px 5px 5px #ccc;
 			padding: 10px;
 			margin-right: 15px;
 		}
@@ -38,43 +41,51 @@
 	<script>
 		function Waterfall(options){
 			this.options = options || {};
-			this.boxId = this.options.boxId || "waterfall";
-			this.listClassName = this.options.listClassName || "list";
-			this.callback = this.options.callback || undefined;
-			this.init();
+			this.boxId = this.options.boxId || "waterfall"; //装载盒子
+			this.listClassName = this.options.listClassName || "list"; //装载模块
+			this.callback = this.options.callback || undefined; //定义回调函数
+			this.data = this.options.data || undefined; //定义添加的数据
+			this.init(); 
+			this.addData(); 
 			this.handle();
 		}
 		Waterfall.prototype = {
 			constructor : Waterfall,
+			//初始化
 			init : function(){
 				_self = this;
 				var listArray = _self.listObject(),
-					listWidth = listArray[0].offsetWidth + 15,
-					listRow = Math.floor(document.getElementById(_self.boxId).offsetWidth/listWidth);
-				var listHeightArray = new Array();
+					//计算模块宽度
+					listWidth = listArray[1].offsetLeft - listArray[0].offsetLeft,
+					//计算列数
+					listRow = Math.floor(document.getElementById(_self.boxId).offsetWidth/listWidth); 
+				//定义装载模块高度数组
+				var listHeightArray = new Array(); 
 				for(var i=0,j=listArray.length; i<j; i++){
 					var listHeight = listArray[i].offsetHeight;
 					if(i<listRow){
-						listHeightArray[i] = listHeight;
+						//装载第一行模块高度
+						listHeightArray[i] = listHeight; 
 					}else{
-						var minHeight = Math.min.apply(null,listHeightArray);
-						var minHeightIndex = _self.arrayIndex(listHeightArray,minHeight);
+						//计算剩下模块的高度最小的一个
+						var minHeight = Math.min.apply(null,listHeightArray); 
+						//获取最小高度模块的索引
+						var minHeightIndex = _self.arrayIndex(listHeightArray,minHeight); 
+						/*
+							接下来为剩下模块添加CSS绝对定位属性，以及位置。
+							最后刷新模块高度数组，讲最小高度数值替换成加入新模块后的新高度
+							PS：每次高度 +10 为模块与同列模块之间距离10px
+						*/
 						listArray[i].style.position = "absolute"
 						listArray[i].style.top = minHeight + 10 + "px";
 						listArray[i].style.left = listArray[minHeightIndex].offsetLeft + "px";
 						listHeightArray[minHeightIndex] += listArray[i].offsetHeight + 10;
 					}
 				}
-				function arrayIndex(){
-					for(var i in array){
-						if(array[i] == item){
-							return i;
-						}else{
-							continue;
-						}
-					}
-				}
 			},
+			/*
+				获取模块数组常用方法，如同JQ中的$(".className")
+			*/
 			listObject : function(){
 				_self = this;
 				if(document.getElementsByClassName){
@@ -91,6 +102,7 @@
 					return listArray;
 				}
 			},
+			//获取最小高度的索引
 			arrayIndex : function(array, item){
 				for(var i in array){
 					if(array[i] == item){
@@ -100,6 +112,10 @@
 					}
 				}
 			},
+			/*
+				监听滚动条位置
+				滚动条位于距页面顶部最大距离所在模块时，返回true
+			*/
 			scrollDown : function(){
 				_self = this;
 				var listArray = _self.listObject(),
@@ -108,6 +124,33 @@
 					documentHeight = document.documentElement.clientHeight;
 				return (lastPicH < scrollTop + documentHeight) ? true : false;
 			},
+			//瀑布流实现动态数据添加
+			addData : function(){
+				_self = this;
+				if(_self.data !== "undefined"){
+					window.onscroll = function(){
+						if(_self.scrollDown()){
+							//创建文档碎片节点
+							var strDom = document.createDocumentFragment();
+							for(var i=0,j=_self.data.length; i<j; i++){
+								var _li = document.createElement("li"),
+									_img = document.createElement("img");
+								_li.className = _self.listClassName;
+								_img.src = _self.data[i];
+								_li.appendChild(_img);
+								strDom.appendChild(_li);
+							}
+							//将添加的数据全部更新进DOM中
+							document.getElementById(_self.boxId).appendChild(strDom);
+						}
+						//刷新新增数据位置
+						new Waterfall({
+							data : _self.data
+						});
+					}
+				}
+			},
+			//回调函数句柄
 			handle : function(){
 				_self = this;
 				if(_self.callback !== "undefined" && typeof(_self.callback) === "function"){
@@ -116,12 +159,10 @@
 			}
 		}
 		window.onload = function(){
-			var data = ['001','002','003','004','005','006','007','008'];
+			var data = ['../pic/pic_01.jpg','../pic/pic_05.jpg','../pic/pic_03.jpg','../pic/pic_04.jpg','../pic/pic_12.jpg','../pic/pic_14.jpg','../pic/pic_11.jpg','../pic/pic_10.jpg'];
 			new Waterfall({
+				data : data,
 				callback : function(){
-					if(this.scrollDown()){
-						//TODO:........
-					}
 				}
 			});
 		}
@@ -129,28 +170,30 @@
 </head>
 <body>
 	<div class="box">
+		<h3>图片来源于<a target="_blank" href="http://image.baidu.com/">baidu图片</a></h3>
 		<ul id="waterfall" class="clearfix">
-			<li class="list"><img src="../pic/1.jpg" alt=""></li>
-			<li class="list"><img src="../pic/4.jpg" alt=""></li>
-			<li class="list"><img src="../pic/5.jpg" alt=""></li>
-			<li class="list"><img src="../pic/2.jpg" alt=""></li>
-			<li class="list"><img src="../pic/3.jpg" alt=""></li>
-			<li class="list"><img src="../pic/9.jpg" alt=""></li>
-			<li class="list"><img src="../pic/007.jpg" alt=""></li>
-			<li class="list"><img src="../pic/1.jpg" alt=""></li>
-			<li class="list"><img src="../pic/6.jpg" alt=""></li>
-			<li class="list"><img src="../pic/7.jpg" alt=""></li>
-			<li class="list"><img src="../pic/4.jpg" alt=""></li>
-			<li class="list"><img src="../pic/1.jpg" alt=""></li>
-			<li class="list"><img src="../pic/4.jpg" alt=""></li>
-			<li class="list"><img src="../pic/5.jpg" alt=""></li>
-			<li class="list"><img src="../pic/2.jpg" alt=""></li>
-			<li class="list"><img src="../pic/3.jpg" alt=""></li>
-			<li class="list"><img src="../pic/9.jpg" alt=""></li>
-			<li class="list"><img src="../pic/6.jpg" alt=""></li>
-			<li class="list"><img src="../pic/5.jpg" alt=""></li>
-			<li class="list"><img src="../pic/2.jpg" alt=""></li>
-			<li class="list"><img src="../pic/3.jpg" alt=""></li>
+			<li class="list"><img src="../pic/pic_01.jpg" alt=""></li>
+			<li class="list"><img src="../pic/pic_02.jpg" alt=""></li>
+			<li class="list"><img src="../pic/pic_05.jpg" alt=""></li>
+			<li class="list"><img src="../pic/pic_08.jpg" alt=""></li>
+			<li class="list"><img src="../pic/pic_07.jpg" alt=""></li>
+			<li class="list"><img src="../pic/pic_02.jpg" alt=""></li>
+			<li class="list"><img src="../pic/pic_10.jpg" alt=""></li>
+			<li class="list"><img src="../pic/pic_08.jpg" alt=""></li>
+			<li class="list"><img src="../pic/pic_11.jpg" alt=""></li>
+			<li class="list"><img src="../pic/pic_02.jpg" alt=""></li>
+			<li class="list"><img src="../pic/pic_14.jpg" alt=""></li>
+			<li class="list"><img src="../pic/pic_03.jpg" alt=""></li>
+			<li class="list"><img src="../pic/pic_02.jpg" alt=""></li>
+			<li class="list"><img src="../pic/pic_08.jpg" alt=""></li>
+			<li class="list"><img src="../pic/pic_08.jpg" alt=""></li>
+			<li class="list"><img src="../pic/pic_07.jpg" alt=""></li>
+			<li class="list"><img src="../pic/pic_06.jpg" alt=""></li>
+			<li class="list"><img src="../pic/pic_10.jpg" alt=""></li>
+			<li class="list"><img src="../pic/pic_08.jpg" alt=""></li>
+			<li class="list"><img src="../pic/pic_07.jpg" alt=""></li>
+			<li class="list"><img src="../pic/pic_03.jpg" alt=""></li>
+			<li class="list"><img src="../pic/pic_11.jpg" alt=""></li>
 		</ul>
 	</div>
 </body>

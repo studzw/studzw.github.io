@@ -70,7 +70,7 @@ $ git pull orgin [branchname]
 // 推送信息
 $ git push -u orgin master
 // 推送其他仓库
-￥ git push -u origin [branchName]
+$ git push -u origin [branchName]
 ```
 ## 结合github的使用
 ### 注册github账号

@@ -142,10 +142,11 @@ Front-end web development is the practice of *converting data*{.fragment .highli
 
 ![受欢迎的语言](//sf1-hscdn-tos.pstatp.com/obj/dp-fe-static/img/emhhbmd3dQ/file_175df8feab92.png =650x)
 
---
+---
 
 岗位需求
 
+<span style="color: green">*整个互联网都缺前端工程师!*{.fragment .fade-left}</span>
 
 ---
 
@@ -178,4 +179,8 @@ Front-end web development is the practice of *converting data*{.fragment .highli
 ---
 
 以上！
+
+--
+
+![](https://raw.githubusercontent.com/saucxs/full_stack_knowledge_list/master/article/wechat/wechat.jpeg)
 

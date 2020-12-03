@@ -67,7 +67,7 @@ Front-end web development is the practice of *converting data*{.fragment .highli
 
 细分垂直领域
 
-![领域思维导图](//lf3-hscdn-tos.pstatp.com/obj/dp-fe-static/img/emhhbmd3dQ/file_175df21cf0873.png =800x)
+![领域思维导图](//sf6-hscdn-tos.pstatp.com/obj/dp-fe-static/img/emhhbmd3dQ/file_17627af232b46.png =800x)
 
 --
 

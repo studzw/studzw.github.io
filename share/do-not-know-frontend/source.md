@@ -44,7 +44,7 @@ Front-end web development is the practice of *converting data*{.fragment .highli
 
 老夫就是JQuery一梭子
 
-![](https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1605780036005&di=2a48f8234a3e9015b6a83ad29aa6f665&imgtype=0&src=http%3A%2F%2Fdtimage.oss-cn-shanghai.aliyuncs.com%2F2017%2F0626%2F26191329f4ss.jpg =400x)
+![](//lf3-hscdn-tos.pstatp.com/obj/dp-fe-static/img/emhhbmd3dQ/file_176363385b21.jpg =400x)
 
 --
 
@@ -182,5 +182,5 @@ Front-end web development is the practice of *converting data*{.fragment .highli
 
 --
 
-![](https://raw.githubusercontent.com/saucxs/full_stack_knowledge_list/master/article/wechat/wechat.jpeg)
+![](//lf6-hscdn-tos.pstatp.com/obj/dp-fe-static/img/emhhbmd3dQ/file_1763634164132.jpeg)
 
